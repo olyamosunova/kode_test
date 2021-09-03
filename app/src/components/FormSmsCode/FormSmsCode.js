@@ -2,22 +2,22 @@ import React from 'react';
 import {Button, Form} from 'react-bootstrap';
 import {ArrowRightCircleFill} from 'react-bootstrap-icons';
 
-const FormSmsCode = ({ submitForm, formErrors, onInput }) => {
+const FormSmsCode = ({ submitForm, data, onInput }) => {
     return (
-        <Form onSubmit={submitForm}>
+        <Form onSubmit={ submitForm }>
             <Form.Group className="mb-3" controlId="formBasicLogin">
                 <Form.Label>Code from SMS</Form.Label>
                 <Form.Control
                     name="code"
                     type="text"
                     placeholder="Enter Code"
-                    onInput={onInput}
-                    className={ formErrors.code ? 'is-invalid' : '' }
+                    onInput={ onInput }
+                    className={ data.code.validationMessage && 'is-invalid' }
                 />
-                { formErrors.code ?
+                { data.code.validationMessage && (
                     <Form.Control.Feedback type="invalid">
-                        { formErrors.code }
-                    </Form.Control.Feedback> : null }
+                        { data.code.validationMessage }
+                    </Form.Control.Feedback>) }
             </Form.Group>
 
             <Button variant="light" type="submit">
