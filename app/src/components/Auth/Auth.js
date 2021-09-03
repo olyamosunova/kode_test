@@ -1,6 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { ArrowRightCircleFill } from 'react-bootstrap-icons';
+import React, { useState} from 'react';
 import FormLogin from '../FormLogin/FormLogin';
 import './Auth.css';
 import FormSmsCode from '../FormSmsCode/FormSmsCode';
