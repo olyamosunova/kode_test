@@ -42,7 +42,7 @@ const Cards = () => {
 
         axios.get('https://api.pokemontcg.io/v2/cards', {
             params: {
-                pageSize: 8
+                pageSize: 4
             }})
             .then(response => {
                 setCards(response.data.data);
@@ -76,7 +76,7 @@ const Cards = () => {
 
         axios.get('https://api.pokemontcg.io/v2/cards', {
             params: {
-                pageSize: 8,
+                pageSize: 4,
                 page: activePage
             }})
             .then(response => {
@@ -122,7 +122,7 @@ const Cards = () => {
                         )}
                     </Col>
                     <Col lg={9} className="p-5">
-                        <Row>
+                        <Row className="mb-5">
                             {filteredCards.map(card => (
                                 <Col lg={6} key={card.id} className="py-3">
                                     <Card>
@@ -142,11 +142,25 @@ const Cards = () => {
 
                         { pageCount > 1 && (
                             <Pagination>
+                                { activePage > 1 && (
+                                    <>
+                                        <Pagination.First onClick={() => setActivePage(1)} />
+                                        <Pagination.Prev onClick={() => setActivePage((prevState => prevState - 1))} />
+                                    </>
+                                ) }
+
                                 {[...Array.from({length: pageCount}, (_, i) => i + 1)].map(page => (
                                     <Pagination.Item key={page} active={page === activePage} onClick={() => handlerPageClick(page)}>
                                         {page}
                                     </Pagination.Item>
                                 ))}
+
+                                { activePage !== pageCount && (
+                                    <>
+                                        <Pagination.Next onClick={() => setActivePage((prevState => prevState + 1))} />
+                                        <Pagination.Last onClick={() => setActivePage(pageCount)} />
+                                    </>
+                                ) }
                             </Pagination>
                         ) }
                     </Col>

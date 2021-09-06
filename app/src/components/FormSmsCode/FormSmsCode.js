@@ -1,8 +1,8 @@
 import React from 'react';
-import {Button, Form} from 'react-bootstrap';
-import {ArrowRightCircleFill} from 'react-bootstrap-icons';
+import { Button, Form } from 'react-bootstrap';
+import { ArrowRightCircleFill } from 'react-bootstrap-icons';
 
-const FormSmsCode = ({ submitForm, data, onInput }) => {
+const FormSmsCode = ({ handleChange, submitForm, errors }) => {
     return (
         <Form onSubmit={ submitForm }>
             <Form.Group className="mb-3" controlId="formBasicLogin">
@@ -11,17 +11,17 @@ const FormSmsCode = ({ submitForm, data, onInput }) => {
                     name="code"
                     type="text"
                     placeholder="Enter Code"
-                    onInput={ onInput }
-                    className={ data.code.validationMessage && 'is-invalid' }
+                    onChange={ handleChange }
+                    className={ errors["code"] && "is-invalid" }
                 />
-                { data.code.validationMessage && (
+                { errors["code"] && (
                     <Form.Control.Feedback type="invalid">
-                        { data.code.validationMessage }
+                        { errors["code"] }
                     </Form.Control.Feedback>) }
             </Form.Group>
 
             <Button variant="light" type="submit">
-                <ArrowRightCircleFill width={'46px'} height={'46px'} />
+                <ArrowRightCircleFill width={ "46px" } height={ "46px" } />
             </Button>
         </Form>
     );

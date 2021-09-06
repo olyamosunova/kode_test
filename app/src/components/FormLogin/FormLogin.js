@@ -1,9 +1,9 @@
 import React from 'react';
-import {Button, Form} from 'react-bootstrap';
-import {ArrowRightCircleFill} from 'react-bootstrap-icons';
+import { Button, Form } from 'react-bootstrap';
+import { ArrowRightCircleFill } from 'react-bootstrap-icons';
 import { ERROR_MESSAGES } from '../../const';
 
-const FormLogin = ({ isAuthorizationSuccess, submitForm, data, onInput }) => {
+const FormLogin = ({ isAuthorizationSuccess, submitForm, handleChange, errors }) => {
     return (
         <Form onSubmit={ submitForm }>
             { !isAuthorizationSuccess && <p className="text-danger">{ ERROR_MESSAGES.incorrect_authorization }</p> }
@@ -14,12 +14,12 @@ const FormLogin = ({ isAuthorizationSuccess, submitForm, data, onInput }) => {
                     name="login"
                     type="text"
                     placeholder="Enter login"
-                    onChange={ onInput }
-                    className={ data.login.validationMessage && "is-invalid" }
+                    onChange={ handleChange }
+                    className={ errors["login"] && "is-invalid" }
                 />
-                { data.login.validationMessage && (
+                { errors["login"] && (
                     <Form.Control.Feedback type="invalid">
-                        { data.login.validationMessage }
+                        { errors["login"] }
                     </Form.Control.Feedback>
                 ) }
             </Form.Group>
@@ -30,17 +30,17 @@ const FormLogin = ({ isAuthorizationSuccess, submitForm, data, onInput }) => {
                     name="password"
                     type="password"
                     placeholder="Password"
-                    onChange={ onInput }
-                    className={ data.password.validationMessage && "is-invalid" }
+                    onChange={ handleChange }
+                    className={ errors["password"] && "is-invalid" }
                 />
-                { data.password.validationMessage && (
+                { errors["password"] && (
                     <Form.Control.Feedback type="invalid">
-                        { data.login.validationMessage }
+                        { errors["password"] }
                     </Form.Control.Feedback>
                 ) }
             </Form.Group>
             <Button variant="light" type="submit">
-                <ArrowRightCircleFill width={"46px"} height={"46px"} />
+                <ArrowRightCircleFill width={ "46px" } height={ "46px" } />
             </Button>
         </Form>
     );

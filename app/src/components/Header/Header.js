@@ -1,7 +1,7 @@
 import React from 'react';
-import {Nav, Navbar} from 'react-bootstrap';
+import { Nav, Navbar } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
 
 const Header = ({ isBackLink = false }) => {
@@ -17,7 +17,7 @@ const Header = ({ isBackLink = false }) => {
                 <Container>
                     { isBackLink && (
                         <Nav className="me-auto">
-                            <Nav.Link onClick={handlerClickBack}>Back</Nav.Link>
+                            <Nav.Link onClick={ handlerClickBack }>Back</Nav.Link>
                         </Nav>
                     ) }
 

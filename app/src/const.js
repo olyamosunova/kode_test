@@ -8,3 +8,8 @@ export const ERROR_MESSAGES = {
     incorrect_authorization: 'Неверный логин или пароль.',
     incorrect_sms_code: 'Неверный код'
 };
+
+export const FORM_NAME = {
+    LOGIN: 'LOGIN',
+    CODE: 'CODE'
+};
