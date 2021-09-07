@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import FormLogin from '../FormLogin/FormLogin';
 import './Authorization.css';
 import FormSmsCode from '../FormSmsCode/FormSmsCode';
-import Container from 'react-bootstrap/Container';
 import { ERROR_MESSAGES, FORM_NAME } from '../../const';
 
 const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => {
