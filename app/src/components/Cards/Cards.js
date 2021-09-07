@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import Loader from '../Loader/Loader';
 import Select from '../Select/Select';
 import './Cards.css';
@@ -9,11 +8,14 @@ import ModalCard from '../ModalCard/ModalCard';
 import { useHistory } from "react-router-dom";
 import { getQueryForCards, setSearchParams } from '../../utils';
 import ErrorBlock from '../ErrorBlock/ErrorBlock';
-import { BASE_URL } from '../../const';
+import pokemon from 'pokemontcgsdk';
+import { POKEMON_API_KEY } from '../../const';
 
 const Cards = () => {
     let history = useHistory();
     const query = new URLSearchParams(history.location.search);
+
+    pokemon.configure({apiKey: POKEMON_API_KEY});
 
     const [cards, setCards] = useState([]);
     const [pokemonTypes, setPokemonTypes] = useState([]);
@@ -23,35 +25,34 @@ const Cards = () => {
     const [chosenSubtype, setChosenSubtype] = useState(query.get('subtype') ?? '');
     const [filteredCards, setFilteredCards] = useState(cards);
     const [pageCount, setPageCount] = useState(0);
-    const [activePage, setActivePage] = useState(query.get('page') ?? 1);
+    const [activePage, setActivePage] = useState(+query.get('page') ?? 1);
     const [activeModal, setActiveModal] = useState(null);
     const [serverError, setServerError] = useState(false);
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/types`)
-            .then(response => {
-                setPokemonTypes(response.data.data);
+
+        pokemon.type.all()
+            .then(types => {
+                setPokemonTypes(types);
             })
             .catch(() => {
                 setServerError(true);
             });
 
-        axios.get(`${BASE_URL}/subtypes`)
-            .then(response => {
-                setPokemonSubtypes(response.data.data);
+        pokemon.subtype.all()
+            .then(subtypes => {
+                setPokemonSubtypes(subtypes);
             })
             .catch(() => {
                 setServerError(true);
             });
 
-        axios.get(`${BASE_URL}/cards`, {
-            params: {
-                pageSize: 4
-            }})
+        pokemon.card.where({ pageSize: 4, page: 1 })
             .then(response => {
-                setCards(response.data.data);
-                setFilteredCards(response.data.data);
-                setPageCount(Math.round(response.data.totalCount / response.data.pageSize));
+                console.log(response);
+                setCards(response.data);
+                setFilteredCards(response.data);
+                setPageCount(Math.round(response.totalCount / response.pageSize));
             })
             .catch(() => {
                 setServerError(true);
@@ -62,14 +63,10 @@ const Cards = () => {
     useEffect(() => {
         let query = getQueryForCards(chosenType, chosenSubtype);
 
-        axios.get(`${BASE_URL}/cards`, {
-            params: {
-                pageSize: 4,
-                q: query
-            }})
+        pokemon.card.where({ pageSize: 4, page: 1, q: query })
             .then(response => {
-                setFilteredCards(response.data.data);
-                setPageCount(Math.round(response.data.totalCount / response.data.pageSize));
+                setFilteredCards(response.data);
+                setPageCount(Math.round(response.totalCount / response.pageSize));
                 setActivePage(1);
             })
             .catch(() => {
@@ -82,15 +79,10 @@ const Cards = () => {
     useEffect(() => {
         let query = getQueryForCards(chosenType, chosenSubtype);
 
-        axios.get(`${BASE_URL}/cards`, {
-            params: {
-                pageSize: 4,
-                page: activePage,
-                q: query
-            }})
+        pokemon.card.where({ pageSize: 4, page: activePage, q: query })
             .then(response => {
-                setCards(response.data.data);
-                setFilteredCards(response.data.data);
+                setCards(response.data);
+                setFilteredCards(response.data);
             })
             .catch(() => {
                 setServerError(true);

@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import './CardDetail.css';
 import Loader from '../Loader/Loader';
 import ErrorBlock from '../ErrorBlock/ErrorBlock';
-import { BASE_URL } from '../../const';
-import axios from 'axios';
+import pokemon from 'pokemontcgsdk';
+import { POKEMON_API_KEY } from '../../const';
 
 const CardDetail = () => {
     let { cardId } = useParams();
@@ -13,17 +13,20 @@ const CardDetail = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [serverError, setServerError] = useState(false);
 
+    pokemon.configure({apiKey: POKEMON_API_KEY});
+
     useEffect(() => {
-        axios.get(`${BASE_URL}/cards/${cardId}`)
-            .then(response => {
-                setData(response.data.data);
+        pokemon.card.find(cardId)
+            .then(card => {
+                console.log(card);
+                setData(card);
             })
             .catch(() => {
                 setServerError(true);
             })
             .finally(() => {
                 setIsLoaded(true);
-            })
+            });
     }, [cardId]);
 
     return (

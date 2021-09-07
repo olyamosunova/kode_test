@@ -14,4 +14,4 @@ export const FORM_NAME = {
     CODE: 'CODE'
 };
 
-export const BASE_URL = `https://api.pokemontcg.io/v2`;
+export const POKEMON_API_KEY = '1cf24b30-3606-41ab-9abd-fc96dbcd39bf';

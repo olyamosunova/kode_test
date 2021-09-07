@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export const getQueryForCards = (type, subtype) => {
     return type && subtype
         ? `types:${type} subtypes:${subtype}`
