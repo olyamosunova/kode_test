@@ -29,9 +29,14 @@ const Select = ({title = 'Type', items = [], onSelect}) => {
     };
 
     const handlerChooseItem = (value) => {
-        setSelectValue(value);
+        if(selectValue === value) {
+            setSelectValue('');
+        } else {
+            setSelectValue(value);
+        }
+
         setSelectOpened(false);
-        onSelect(value);
+        onSelect(selectValue === value ? '' : value);
     };
 
     const handlerSearch = (evt) => {
