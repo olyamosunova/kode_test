@@ -2,7 +2,7 @@
   "name": "kode_test",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://olyamosunova.github.io/pokemons",
+  "homepage": "http://olyamosunova.github.io/kode_test/app",
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/lab": "^4.0.0-alpha.60",

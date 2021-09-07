@@ -105,6 +105,10 @@ const Cards = () => {
         setActivePage(page);
     };
 
+    const handlerClickCard = (card) => {
+        console.log('click', card);
+    };
+
     return (
         <>
             {!isLoaded
@@ -125,7 +129,7 @@ const Cards = () => {
                     <div className="cards__wrapper">
                         <div className="cards__list">
                             { filteredCards.map(card => (
-                                <CardItem className="cards__item" key={card.id} card={card} />
+                                <CardItem className="cards__item" key={card.id} card={card} handlerClickCard={ handlerClickCard } />
                             ))}
 
                             { !filteredCards.length && <p>Pokemons not found by this filter</p> }
