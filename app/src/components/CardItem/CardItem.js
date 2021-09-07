@@ -9,7 +9,7 @@ const CardItem = ({ className, card, handlerClickCard }) => {
     };
 
     return (
-        <div className={cx(className, {'card-item': true})} tabIndex={0} onClick={ () => handlerClickCard(card) } >
+        <div className={cx(className, {'card-item': true})} tabIndex={0} onClick={ handlerClickCard } >
             <div className="card-item__image">
                 <img src={card.images?.small} alt={card.name} />
             </div>

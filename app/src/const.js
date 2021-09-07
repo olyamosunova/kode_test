@@ -13,3 +13,5 @@ export const FORM_NAME = {
     LOGIN: 'LOGIN',
     CODE: 'CODE'
 };
+
+export const BASE_URL = `https://api.pokemontcg.io/v2`;

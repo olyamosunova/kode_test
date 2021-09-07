@@ -2,9 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import './Select.css';
 import cx from 'classnames';
 
-const Select = ({title = 'Type', items = [], onSelect}) => {
+const Select = ({title = 'Type', items = [], onSelect, activeItem = ''}) => {
     const [selectOpened, setSelectOpened] = useState(false);
-    const [selectValue, setSelectValue] = useState('');
+    const [selectValue, setSelectValue] = useState(activeItem);
     const [filteredItems, setFilteredItems] = useState(items);
     const searchInputEl = useRef();
     const selectEl = useRef();

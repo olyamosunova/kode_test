@@ -15,10 +15,10 @@ const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => 
 
     useEffect(() => {
         if (serverError) {
-            setState({
-                ...state,
+            setState(prevState => ({
+                ...prevState,
                 errors: {}
-            })
+            }))
         }
     }, [serverError]);
 
@@ -46,6 +46,9 @@ const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => 
                     errors['code'] = ERROR_MESSAGES.empty_field;
                 }
 
+                break;
+
+            default:
                 break;
         }
 

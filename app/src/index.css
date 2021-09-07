@@ -87,3 +87,7 @@ input {
 main {
   flex-grow: 1;
 }
+
+.server-errors {
+  color: #8B0000;
+}

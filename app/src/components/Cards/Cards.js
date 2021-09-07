@@ -5,36 +5,46 @@ import Select from '../Select/Select';
 import './Cards.css';
 import Pagination from '@material-ui/lab/Pagination';
 import CardItem from '../CardItem/CardItem';
+import ModalCard from '../ModalCard/ModalCard';
+import { useHistory } from "react-router-dom";
+import { getQueryForCards, setSearchParams } from '../../utils';
+import ErrorBlock from '../ErrorBlock/ErrorBlock';
+import { BASE_URL } from '../../const';
 
 const Cards = () => {
+    let history = useHistory();
+    const query = new URLSearchParams(history.location.search);
+
     const [cards, setCards] = useState([]);
     const [pokemonTypes, setPokemonTypes] = useState([]);
     const [pokemonSubtypes, setPokemonSubtypes] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [chosenType, setChosenType] = useState('');
-    const [chosenSubtype, setChosenSubtype] = useState('');
+    const [chosenType, setChosenType] = useState(query.get('type') ?? '');
+    const [chosenSubtype, setChosenSubtype] = useState(query.get('subtype') ?? '');
     const [filteredCards, setFilteredCards] = useState(cards);
     const [pageCount, setPageCount] = useState(0);
-    const [activePage, setActivePage] = useState(1);
+    const [activePage, setActivePage] = useState(query.get('page') ?? 1);
+    const [activeModal, setActiveModal] = useState(null);
+    const [serverError, setServerError] = useState(false);
 
     useEffect(() => {
-        axios.get('https://api.pokemontcg.io/v2/types')
+        axios.get(`${BASE_URL}/types`)
             .then(response => {
                 setPokemonTypes(response.data.data);
             })
-            .catch((error) => {
-                console.error(error);
+            .catch(() => {
+                setServerError(true);
             });
 
-        axios.get('https://api.pokemontcg.io/v2/subtypes')
+        axios.get(`${BASE_URL}/subtypes`)
             .then(response => {
                 setPokemonSubtypes(response.data.data);
             })
-            .catch((error) => {
-                console.error(error);
+            .catch(() => {
+                setServerError(true);
             });
 
-        axios.get('https://api.pokemontcg.io/v2/cards', {
+        axios.get(`${BASE_URL}/cards`, {
             params: {
                 pageSize: 4
             }})
@@ -43,18 +53,16 @@ const Cards = () => {
                 setFilteredCards(response.data.data);
                 setPageCount(Math.round(response.data.totalCount / response.data.pageSize));
             })
-            .catch((error) => {
-                console.error(error);
+            .catch(() => {
+                setServerError(true);
             })
             .finally(() => setIsLoaded(true));
     }, []);
 
     useEffect(() => {
-        let query = chosenType && chosenSubtype
-            ? `types:${chosenType} subtypes:${chosenSubtype}`
-            : chosenType ? `types:${chosenType}` :  chosenSubtype && `subtypes:${chosenSubtype}`;
+        let query = getQueryForCards(chosenType, chosenSubtype);
 
-        axios.get('https://api.pokemontcg.io/v2/cards', {
+        axios.get(`${BASE_URL}/cards`, {
             params: {
                 pageSize: 4,
                 q: query
@@ -65,19 +73,16 @@ const Cards = () => {
                 setActivePage(1);
             })
             .catch(() => {
-                setFilteredCards([]);
-                setPageCount(0);
-                setActivePage(1);
+                setServerError(true);
             });
 
+        history.push(`/cards${ setSearchParams(chosenType, chosenSubtype, activePage) }`);
     }, [chosenType, chosenSubtype]);
 
     useEffect(() => {
-        let query = chosenType && chosenSubtype
-            ? `types:${chosenType} subtypes:${chosenSubtype}`
-            : chosenType ? `types:${chosenType}` :  chosenSubtype && `subtypes:${chosenSubtype}`;
+        let query = getQueryForCards(chosenType, chosenSubtype);
 
-        axios.get('https://api.pokemontcg.io/v2/cards', {
+        axios.get(`${BASE_URL}/cards`, {
             params: {
                 pageSize: 4,
                 page: activePage,
@@ -87,9 +92,11 @@ const Cards = () => {
                 setCards(response.data.data);
                 setFilteredCards(response.data.data);
             })
-            .catch((error) => {
-                console.error(error);
+            .catch(() => {
+                setServerError(true);
             });
+
+        history.push(`/cards${ setSearchParams(chosenType, chosenSubtype, activePage) }`);
     }, [activePage]);
 
     const handlerSelectType = (value) => {
@@ -97,16 +104,12 @@ const Cards = () => {
     };
 
     const handlerSelectSubtype = (value) => {
-        setChosenSubtype(value)
+        setChosenSubtype(value);
     };
 
-    const handlerPageClick = (evt, page) => {
+    const handlerPageClick = (evt, currentPage) => {
         evt.preventDefault();
-        setActivePage(page);
-    };
-
-    const handlerClickCard = (card) => {
-        console.log('click', card);
+        setActivePage(currentPage);
     };
 
     return (
@@ -115,32 +118,53 @@ const Cards = () => {
                 ?
                 <Loader />
                 :
-                <div className="cards">
-                    <div className="cards__filter">
-                        { pokemonTypes.length && (
-                            <Select title="Type" items={ pokemonTypes } onSelect={ handlerSelectType } />
-                        )}
 
-                        { pokemonSubtypes.length && (
-                            <Select title="Subtype" items={ pokemonSubtypes } onSelect={ handlerSelectSubtype } />
-                        )}
-                    </div>
+                <>
+                { serverError
+                    ? <ErrorBlock message="Не удалось загрузить карточки. Попробуйте перезагрузить страницу." />
+                    :
+                    <div className="cards">
+                        <div className="cards__filter">
+                            { pokemonTypes.length && (
+                                <Select title="Type" items={ pokemonTypes } onSelect={ handlerSelectType } activeItem={ chosenType } />
+                            )}
 
-                    <div className="cards__wrapper">
-                        <div className="cards__list">
-                            { filteredCards.map(card => (
-                                <CardItem className="cards__item" key={card.id} card={card} handlerClickCard={ handlerClickCard } />
-                            ))}
-
-                            { !filteredCards.length && <p>Pokemons not found by this filter</p> }
+                            { pokemonSubtypes.length && (
+                                <Select title="Subtype" items={ pokemonSubtypes } onSelect={ handlerSelectSubtype } activeItem={ chosenSubtype } />
+                            )}
                         </div>
 
-                        { pageCount > 1 && (
-                            <Pagination page={activePage} onChange={handlerPageClick} count={ pageCount } showFirstButton showLastButton />
-                        ) }
+                        <div className="cards__wrapper">
+                            <div className="cards__list">
+                                { filteredCards.map(card => (
+                                    <CardItem
+                                        className="cards__item"
+                                        key={card.id}
+                                        card={card}
+                                        handlerClickCard={ () => setActiveModal(card) }
+                                    />
+                                ))}
+
+                                { !filteredCards.length && <p>Pokemons not found by this filter</p> }
+                            </div>
+
+                            { pageCount > 1 && (
+                                <Pagination
+                                    page={ activePage }
+                                    onChange={ handlerPageClick }
+                                    count={ pageCount }
+                                    showFirstButton showLastButton
+                                />
+                            ) }
+                        </div>
                     </div>
-                </div>
+
+                }
+                </>
+
             }
+
+            { activeModal && <ModalCard card={ activeModal } handlerCloseModal={ () => setActiveModal(null) } /> }
             </>
     );
 };
