@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Row, Col, Card, Pagination} from 'react-bootstrap';
 import axios from 'axios';
 import Loader from '../Loader/Loader';
 import Select from '../Select/Select';
-import {Link} from 'react-router-dom';
 import './Cards.css';
+import Pagination from '@material-ui/lab/Pagination';
+import { useHistory } from "react-router-dom";
+import CardItem from '../CardItem/CardItem';
 
 const Cards = () => {
     const [cards, setCards] = useState([]);
@@ -16,28 +17,23 @@ const Cards = () => {
     const [filteredCards, setFilteredCards] = useState(cards);
     const [pageCount, setPageCount] = useState(0);
     const [activePage, setActivePage] = useState(1);
+    let history = useHistory();
 
     useEffect(() => {
         axios.get('https://api.pokemontcg.io/v2/types')
             .then(response => {
                 setPokemonTypes(response.data.data);
-                // handle success
-                console.log(response);
             })
             .catch((error) => {
-                // handle error
-                console.log(error);
+                console.error(error);
             });
 
         axios.get('https://api.pokemontcg.io/v2/subtypes')
             .then(response => {
                 setPokemonSubtypes(response.data.data);
-                // handle success
-                console.log(response);
             })
             .catch((error) => {
-                // handle error
-                console.log(error);
+                console.error(error);
             });
 
         axios.get('https://api.pokemontcg.io/v2/cards', {
@@ -48,12 +44,9 @@ const Cards = () => {
                 setCards(response.data.data);
                 setFilteredCards(response.data.data);
                 setPageCount(Math.round(response.data.totalCount / response.data.pageSize));
-                // handle success
-                console.log(response);
             })
             .catch((error) => {
-                // handle error
-                console.log(error);
+                console.error(error);
             })
             .finally(() => setIsLoaded(true));
     }, []);
@@ -82,16 +75,12 @@ const Cards = () => {
             .then(response => {
                 setCards(response.data.data);
                 setFilteredCards(response.data.data);
-                // handle success
-                console.log(response);
             })
             .catch((error) => {
-                // handle error
-                console.log(error);
+                console.error(error);
             })
             .finally(() => setIsLoaded(true));
     }, [activePage]);
-
 
     const handlerSelectType = (value) => {
         setChosenType(value);
@@ -101,18 +90,19 @@ const Cards = () => {
         setChosenSubtype(value)
     };
 
-    const handlerPageClick = (page) => {
+    const handlerPageClick = (evt, page) => {
+        evt.preventDefault();
         setActivePage(page);
     };
 
     return (
-        <div>
+        <>
             {!isLoaded
                 ?
                 <Loader />
                 :
-                <Row>
-                    <Col lg={3} className="px-4 py-5">
+                <div className="cards">
+                    <div className="cards__filter">
                         { pokemonTypes.length && (
                             <Select title="Type" items={ pokemonTypes } onSelect={handlerSelectType} />
                         )}
@@ -120,54 +110,22 @@ const Cards = () => {
                         { pokemonSubtypes.length && (
                             <Select title="Subtype" items={ pokemonSubtypes } onSelect={handlerSelectSubtype} />
                         )}
-                    </Col>
-                    <Col lg={9} className="p-5">
-                        <Row className="mb-5">
+                    </div>
+
+                    <div className="cards__wrapper">
+                        <div className="cards__list">
                             {filteredCards.map(card => (
-                                <Col lg={6} key={card.id} className="py-3">
-                                    <Card>
-                                        <Link to={`/cards/${card.id}`} className="card__link">
-                                        <Card.Img variant="top" src={card.images.large} />
-                                        <Card.Body>
-                                            <Card.Title>{card.name}</Card.Title>
-                                            <Card.Text>{card.artist}</Card.Text>
-                                        </Card.Body>
-                                        </Link>
-                                    </Card>
-
-
-                                </Col>
+                                <CardItem className="cards__item" key={card.id} card={card} />
                             ))}
-                        </Row>
+                        </div>
 
                         { pageCount > 1 && (
-                            <Pagination>
-                                { activePage > 1 && (
-                                    <>
-                                        <Pagination.First onClick={() => setActivePage(1)} />
-                                        <Pagination.Prev onClick={() => setActivePage((prevState => prevState - 1))} />
-                                    </>
-                                ) }
-
-                                {[...Array.from({length: pageCount}, (_, i) => i + 1)].map(page => (
-                                    <Pagination.Item key={page} active={page === activePage} onClick={() => handlerPageClick(page)}>
-                                        {page}
-                                    </Pagination.Item>
-                                ))}
-
-                                { activePage !== pageCount && (
-                                    <>
-                                        <Pagination.Next onClick={() => setActivePage((prevState => prevState + 1))} />
-                                        <Pagination.Last onClick={() => setActivePage(pageCount)} />
-                                    </>
-                                ) }
-                            </Pagination>
+                            <Pagination page={activePage} onChange={handlerPageClick} count={ pageCount } showFirstButton showLastButton />
                         ) }
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             }
-
-        </div>
+            </>
     );
 };
 

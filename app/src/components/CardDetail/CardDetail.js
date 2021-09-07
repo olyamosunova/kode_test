@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Header from '../Header/Header';
-import Container from 'react-bootstrap/Container';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import './CardDetail.css';
 import Loader from '../Loader/Loader';
 
@@ -18,7 +15,6 @@ const CardDetail = () => {
             .then(response => {
                 setData(response.data.data);
                 setIsLoaded(true);
-                console.log(response);
             })
             .catch(error => {
                 console.error(error);
@@ -26,22 +22,27 @@ const CardDetail = () => {
     }, []);
 
     return (
-        <div>
+        <>
             <Header isBackLink={ true } />
-            <main>
-                <Container>
-                    <div className="card-detail py-5">
 
-                        { isLoaded ? (
-                            <Row>
-                                <Col lg={6}>
+            <>
+                { !isLoaded
+                    ?
+                    <Loader />
+                    :
+                    <main>
+                        <div className="container">
+                            <div className="card-detail">
+                                <p className="card-detail__title">{data.name}</p>
+
+                                <div className="card-detail__block">
                                     <div className="card-detail__image">
                                         <img src={data.images?.large} alt={data.name} />
                                     </div>
+                                </div>
 
-                                    <p className="card-detail__description">{data.flavorText}</p>
-                                </Col>
-                                <Col lg={6}>
+
+                                <div className="card-detail__block">
                                     <div className="card-detail__info">
                                         <p>Pokemon name: <b>{data.name}</b></p>
                                         <p>Supertype: <b>{data.supertype}</b></p>
@@ -50,16 +51,20 @@ const CardDetail = () => {
                                     </div>
 
                                     <div className="card-detail__info">
-                                        { data.attacks.map(item => <p key={item.name}>Attack <b>{item.name}</b></p>) }
+                                        <ul>
+                                            { data.attacks.map(item => <li key={item.name}><b>{item.name}</b></li>) }
+                                        </ul>
                                     </div>
-                                </Col>
-                            </Row>
-                        ) : <Loader /> }
 
-                    </div>
-                </Container>
-            </main>
-        </div>
+                                    <p className="card-detail__description">{data.flavorText}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                }
+            </>
+
+        </>
     );
 };
 

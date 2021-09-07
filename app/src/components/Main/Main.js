@@ -1,19 +1,18 @@
 import React from 'react';
 import './Main.css';
-import Container from 'react-bootstrap/Container';
 import Cards from '../Cards/Cards';
 import Header from '../Header/Header';
 
 const Main = () => {
     return (
-        <div>
+        <>
             <Header />
             <main>
-                <Container>
+                <div className="container">
                     <Cards />
-                </Container>
+                </div>
             </main>
-        </div>
+        </>
     );
 };
 

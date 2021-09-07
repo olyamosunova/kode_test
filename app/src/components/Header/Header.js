@@ -1,8 +1,7 @@
 import React from 'react';
-import { Nav, Navbar } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container';
 import { Link } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
+import './Header.css';
 
 const Header = ({ isBackLink = false }) => {
     let history = useHistory();
@@ -12,22 +11,14 @@ const Header = ({ isBackLink = false }) => {
     };
 
     return (
-        <header>
-            <Navbar bg="dark" variant="dark">
-                <Container>
-                    { isBackLink && (
-                        <Nav className="me-auto">
-                            <Nav.Link onClick={ handlerClickBack }>Back</Nav.Link>
-                        </Nav>
-                    ) }
+        <header className="header">
+            <div className="container">
+                <div className="header__nav">
+                    { isBackLink && <button type="button" onClick={ handlerClickBack }>&lt; Back</button> }
 
-                    <Navbar.Collapse className="justify-content-end">
-                        <Navbar.Text>
-                            <Link to="/logout">Logout</Link>
-                        </Navbar.Text>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+                    <Link className="ml-auto" to="/logout">Logout</Link>
+                </div>
+            </div>
         </header>
     );
 };

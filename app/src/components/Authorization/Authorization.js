@@ -93,14 +93,16 @@ const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => 
     };
 
     return (
-        <Container className="auth">
-            { serverError && <p className="text-danger">Ошибка сервера: {serverError}</p> }
+        <div className="auth">
+            <div className="container">
+                { serverError && <p className="text-danger">Ошибка сервера: {serverError}</p> }
 
-            { showCodeForm
-                ? <FormSmsCode handleChange={ handleChange } submitForm={ codeSubmit } errors={ state.errors } />
-                : <FormLogin isAuthorizationSuccess={ isAuthorizationSuccess } handleChange={ handleChange } submitForm={ loginSubmit } errors={ state.errors } />
-            }
-        </Container>
+                { showCodeForm
+                    ? <FormSmsCode handleChange={ handleChange } submitForm={ codeSubmit } errors={ state.errors } />
+                    : <FormLogin isAuthorizationSuccess={ isAuthorizationSuccess } handleChange={ handleChange } submitForm={ loginSubmit } errors={ state.errors } />
+                }
+            </div>
+        </div>
     );
 };
 
