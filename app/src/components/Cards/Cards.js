@@ -25,7 +25,7 @@ const Cards = () => {
     const [chosenSubtype, setChosenSubtype] = useState(query.get('subtype') ?? '');
     const [filteredCards, setFilteredCards] = useState(cards);
     const [pageCount, setPageCount] = useState(0);
-    const [activePage, setActivePage] = useState(+query.get('page') ?? 1);
+    const [activePage, setActivePage] = useState(query.get('page') ? +query.get('page') : 1);
     const [activeModal, setActiveModal] = useState(null);
     const [serverError, setServerError] = useState(false);
 
