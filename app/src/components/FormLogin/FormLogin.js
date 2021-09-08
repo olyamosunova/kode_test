@@ -38,7 +38,7 @@ const FormLogin = ({ isAuthorizationSuccess, submitForm, handleChange, errors })
 
             <div className="form__block">
                 <label className={ errors["password"] && "is-invalid" }>
-                    <span>Login</span>
+                    <span>Password</span>
                     <input
                         name="password"
                         type="password"
