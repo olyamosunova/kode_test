@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
-import './Select.css';
+import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
+import './Select.css';
 
 const Select = ({title = 'Type', items = [], onSelect, activeItem = ''}) => {
     const [selectOpened, setSelectOpened] = useState(false);

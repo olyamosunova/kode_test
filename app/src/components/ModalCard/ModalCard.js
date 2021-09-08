@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
-import './ModalCard.css';
+import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
+import './ModalCard.css';
 
 const ModalCard = ({ card, handlerCloseModal }) => {
     const { name, images } = card;
@@ -24,7 +24,10 @@ const ModalCard = ({ card, handlerCloseModal }) => {
 
   return (
       <div className="modal-card">
-          <div className={cx("modal-card__wrapper", {'modal-card__wrapper--show': modalShow})} ref={ ModalWrapper }>
+          <div
+              className={ cx("modal-card__wrapper", { "modal-card__wrapper--show": modalShow }) }
+              ref={ ModalWrapper }
+          >
               <div className="modal-card__header">
                   <p className="modal-card__title">{ name }</p>
                   <button className="modal-card__close" type="button" onClick={ handlerCloseModal }>

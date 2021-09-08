@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import { HashRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
-import './App.css';
 import Authorization from '../Authorization/Authorization';
-import { AuthorizationStatus } from '../../const';
-import Main from '../Main/Main';
 import CardDetail from '../CardDetail/CardDetail';
+import Cards from '../Cards/Cards';
+import { AuthorizationStatus } from '../../const';
+import './App.css';
 
 const App = () => {
     const [authorizationStatus, setAuthorizationStatus] = useState(
@@ -51,10 +51,6 @@ const App = () => {
         return false;
     };
 
-    const Auth = () => {
-        return <Authorization onLoginFormSubmit={ loginHandler } onCodeFormSubmit={ smsCodeHandler } serverError={ serverError } />
-    };
-
     const renderLogoutPage = () => {
         localStorage.removeItem('pokemonAuthorization');
         setAuthorizationStatus(AuthorizationStatus.NO_AUTH);
@@ -80,7 +76,11 @@ const App = () => {
                         path='/login'
                         render={() => {
                             return authorizationStatus !== AuthorizationStatus.AUTH
-                                ? <Auth />
+                                ? <Authorization
+                                    onLoginFormSubmit={ loginHandler }
+                                    onCodeFormSubmit={ smsCodeHandler }
+                                    serverError={ serverError }
+                                />
                                 : <Redirect to='/cards' />;
                         }}
                     />
@@ -95,7 +95,7 @@ const App = () => {
                         render={() => {
                             return authorizationStatus !== AuthorizationStatus.AUTH
                                 ? <Redirect to='/login' />
-                                : <Main />;
+                                : <Cards />;
                         }}
                     />
                     <Route

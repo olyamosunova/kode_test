@@ -1,9 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { ERROR_MESSAGES } from '../../const';
+import cx from 'classnames';
 
 const FormLogin = ({ isAuthorizationSuccess, submitForm, handleChange, errors }) => {
+    const [formError, setFormError] = useState(false);
+
+    useEffect(() => {
+        if (errors['login'] || errors['password'] || !isAuthorizationSuccess) {
+            setFormError(true);
+        }
+    }, [errors]);
+
+    const handlerSubmitForm = (evt) => {
+        setFormError(false);
+        submitForm(evt);
+    };
+
     return (
-        <form className="form" onSubmit={ submitForm }>
+        <form
+            className={ cx("form", { "form--error": formError }) }
+            onSubmit={ handlerSubmitForm }
+        >
             { !isAuthorizationSuccess && <p className="form__error">{ ERROR_MESSAGES.incorrect_authorization }</p> }
 
             <div className="form__block">

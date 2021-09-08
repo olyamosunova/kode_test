@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import Header from '../Header/Header';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import './CardDetail.css';
+import pokemon from 'pokemontcgsdk';
+import Header from '../Header/Header';
 import Loader from '../Loader/Loader';
 import ErrorBlock from '../ErrorBlock/ErrorBlock';
-import pokemon from 'pokemontcgsdk';
 import { POKEMON_API_KEY } from '../../const';
+import './CardDetail.css';
 
 const CardDetail = () => {
     let { cardId } = useParams();
@@ -13,12 +13,11 @@ const CardDetail = () => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [serverError, setServerError] = useState(false);
 
-    pokemon.configure({apiKey: POKEMON_API_KEY});
+    pokemon.configure({ apiKey: POKEMON_API_KEY });
 
     useEffect(() => {
         pokemon.card.find(cardId)
             .then(card => {
-                console.log(card);
                 setData(card);
             })
             .catch(() => {
@@ -32,46 +31,47 @@ const CardDetail = () => {
     return (
         <>
             <Header isBackLink={ true } />
-
-            <>
                 { !isLoaded
                     ?
                     <Loader />
                     :
-
                     <>
                         { serverError
-                            ? <ErrorBlock message="Не удалось загрузить детальную информацию. Попробуйте перезагрузить страницу."/>
+                            ? <ErrorBlock
+                                message="Не удалось загрузить детальную информацию. Попробуйте перезагрузить страницу."
+                            />
                             :
                             <main>
                                 <div className="container">
                                     <div className="card-detail">
-                                        <p className="card-detail__title">{data.name}</p>
+                                        <p className="card-detail__title">{ data.name }</p>
 
                                         <div className="card-detail__block">
                                             <div className="card-detail__image">
-                                                <img src={data.images?.large} alt={data.name} />
+                                                <img src={ data.images?.large } alt={ data.name } />
                                             </div>
                                         </div>
 
 
                                         <div className="card-detail__block">
                                             <div className="card-detail__info">
-                                                <p>Pokemon name: <b>{data.name}</b></p>
-                                                <p>Supertype: <b>{data.supertype}</b></p>
-                                                <p>Types: <b>{data.types?.join(', ')}</b></p>
-                                                <p>Subtypes: <b>{data.subtypes?.join(', ')}</b></p>
+                                                <p>Pokemon name: <b>{ data.name }</b></p>
+                                                <p>Supertype: <b>{ data.supertype }</b></p>
+                                                <p>Types: <b>{ data.types?.join(', ') }</b></p>
+                                                <p>Subtypes: <b>{ data.subtypes?.join(', ') }</b></p>
                                             </div>
 
                                             { data.attacks?.length && (
                                                 <div className="card-detail__info">
                                                     <ul>
-                                                        { data.attacks?.map(item => <li key={item.name}><b>{item.name}</b></li>) }
+                                                        { data.attacks?.map(item => (
+                                                            <li key={ item.name }><b>{ item.name }</b></li>
+                                                        ))}
                                                     </ul>
                                                 </div>
                                             )}
 
-                                            <p className="card-detail__description">{data.flavorText}</p>
+                                            <p className="card-detail__description">{ data.flavorText }</p>
                                         </div>
                                     </div>
                                 </div>
@@ -79,8 +79,6 @@ const CardDetail = () => {
                         }
                     </>
                 }
-            </>
-
         </>
     );
 };

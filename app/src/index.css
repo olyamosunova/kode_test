@@ -91,3 +91,7 @@ main {
 .server-errors {
   color: #8B0000;
 }
+
+.hidden {
+  overflow: hidden;
+}
