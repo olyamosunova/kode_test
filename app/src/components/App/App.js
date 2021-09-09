@@ -33,7 +33,7 @@ const App = () => {
         return code;
     };
 
-    const handlerLoginFormSubmit = ({ login, password }) => login === 'kode@kode.ru' && password === 'Enk0deng';
+    const handlerLoginFormSubmit = ({ login, password }) => login.toLowerCase() === 'kode@kode.ru' && password === 'Enk0deng';
 
     const handlerCodeFormSubmit = async (login, code) => {
         const getCode = await checkCode(code);
