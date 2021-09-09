@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Authorization from '../Authorization/Authorization';
 import CardDetail from '../CardDetail/CardDetail';
 import Cards from '../Cards/Cards';
@@ -49,7 +49,7 @@ const App = () => {
 
     return (
         <div className='app'>
-            <Router basename='/kode_test'>
+            <Router>
                 <Switch>
                     <Route
                         exact
