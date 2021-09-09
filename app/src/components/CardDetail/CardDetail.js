@@ -7,8 +7,8 @@ import ErrorBlock from '../ErrorBlock/ErrorBlock';
 import { POKEMON_API_KEY } from '../../const';
 import './CardDetail.css';
 
-const CardDetail = () => {
-    let { cardId } = useParams();
+const CardDetail = ({ handlerClickLogout }) => {
+    const { cardId } = useParams();
     const [data, setData] = useState({});
     const [isLoaded, setIsLoaded] = useState(false);
     const [serverError, setServerError] = useState(false);
@@ -30,7 +30,7 @@ const CardDetail = () => {
 
     return (
         <>
-            <Header isBackLink={ true } />
+            <Header clickLogout={ handlerClickLogout } isBackLink={ true } />
                 { !isLoaded
                     ?
                     <Loader />
@@ -38,23 +38,25 @@ const CardDetail = () => {
                     <>
                         { serverError
                             ? <ErrorBlock
-                                message="Не удалось загрузить детальную информацию. Попробуйте перезагрузить страницу."
+                                message='Failed to load detail information.'
+                                backUrl='/cards'
+                                handlerClickBack={ () => setServerError(false) }
                             />
                             :
                             <main>
-                                <div className="container">
-                                    <div className="card-detail">
-                                        <p className="card-detail__title">{ data.name }</p>
+                                <div className='container'>
+                                    <div className='card-detail'>
+                                        <p className='card-detail__title'>{ data.name }</p>
 
-                                        <div className="card-detail__block">
-                                            <div className="card-detail__image">
+                                        <div className='card-detail__block'>
+                                            <div className='card-detail__image'>
                                                 <img src={ data.images?.large } alt={ data.name } />
                                             </div>
                                         </div>
 
 
-                                        <div className="card-detail__block">
-                                            <div className="card-detail__info">
+                                        <div className='card-detail__block'>
+                                            <div className='card-detail__info'>
                                                 <p>Pokemon name: <b>{ data.name }</b></p>
                                                 <p>Supertype: <b>{ data.supertype }</b></p>
                                                 <p>Types: <b>{ data.types?.join(', ') }</b></p>
@@ -62,7 +64,7 @@ const CardDetail = () => {
                                             </div>
 
                                             { data.attacks?.length && (
-                                                <div className="card-detail__info">
+                                                <div className='card-detail__info'>
                                                     <ul>
                                                         { data.attacks?.map(item => (
                                                             <li key={ item.name }><b>{ item.name }</b></li>
@@ -71,7 +73,7 @@ const CardDetail = () => {
                                                 </div>
                                             )}
 
-                                            <p className="card-detail__description">{ data.flavorText }</p>
+                                            <p className='card-detail__description'>{ data.flavorText }</p>
                                         </div>
                                     </div>
                                 </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import './Select.css';
 
-const Select = ({title = 'Type', items = [], onSelect, activeItem = ''}) => {
+const Select = ({ title = 'Type', items = [], onSelect, activeItem = '' }) => {
     const [selectOpened, setSelectOpened] = useState(false);
     const [selectValue, setSelectValue] = useState(activeItem);
     const [filteredItems, setFilteredItems] = useState(items);
@@ -24,11 +24,11 @@ const Select = ({title = 'Type', items = [], onSelect, activeItem = ''}) => {
         searchInputEl.current.value = '';
     }, [selectOpened]);
 
-    const handlerOpenSelect = () => {
+    const handlerClickSelect = () => {
         setSelectOpened(!selectOpened);
     };
 
-    const handlerChooseItem = (value) => {
+    const handlerClickItem = (value) => {
         if(selectValue === value) {
             setSelectValue('');
         } else {
@@ -39,7 +39,7 @@ const Select = ({title = 'Type', items = [], onSelect, activeItem = ''}) => {
         onSelect(selectValue === value ? '' : value);
     };
 
-    const handlerSearch = (evt) => {
+    const handlerClickSearch = (evt) => {
         const value = evt.target.value.toLowerCase();
         const newItems = items.filter(item => item.toLowerCase().indexOf(value) > -1);
 
@@ -51,21 +51,25 @@ const Select = ({title = 'Type', items = [], onSelect, activeItem = ''}) => {
     };
 
     return (
-        <div ref={selectEl} className={cx('select my-5', {'select--open': selectOpened})}>
-            <div className="select__header" onClick={handlerOpenSelect}>
+        <div ref={ selectEl } className={ cx('select my-5', { 'select--open': selectOpened }) }>
+            <div className='select__header' onClick={ handlerClickSelect }>
                 <span>{ selectValue ? selectValue : title }</span>
 
             </div>
-            <div className="select__body">
-                <div className="select__search">
-                    <input ref={searchInputEl} onInput={(evt) => handlerSearch(evt)} placeholder="Type something..." />
+            <div className='select__body'>
+                <div className='select__search'>
+                    <input
+                        ref={ searchInputEl }
+                        onInput={ (evt) => handlerClickSearch(evt) }
+                        placeholder='Type something...'
+                    />
                 </div>
-                <div className="select__list">
+                <div className='select__list'>
                     { filteredItems.map(item => (
                         <a
                             key={item}
                             className={cx('select__item', {'select__item--active': item === selectValue})}
-                            onClick={() => handlerChooseItem(item)}
+                            onClick={() => handlerClickItem(item)}
                         >{ item }</a>
                     )) }
                 </div>

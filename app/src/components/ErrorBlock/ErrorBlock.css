@@ -11,7 +11,26 @@
     color: #8B0000;
 }
 
+.error-block img {
+    margin-bottom: 40px;
+}
+
 .error-block p {
-    margin-bottom: 80px;
+    margin-bottom: 40px;
+
     text-align: center;
+}
+
+.error-block a {
+    min-width: 250px;
+
+    color: #ffffff;
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.error-block a:hover,
+.error-block a:focus {
+    text-decoration: none;
 }

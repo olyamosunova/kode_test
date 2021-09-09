@@ -1,21 +1,28 @@
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import './Header.css';
 
-const Header = ({ isBackLink = false }) => {
-    let history = useHistory();
+const Header = ({ clickLogout, isBackLink = false }) => {
+    const history = useHistory();
 
     const handlerClickBack = () => {
         history.goBack();
     };
 
-    return (
-        <header className="header">
-            <div className="container">
-                <div className="header__nav">
-                    { isBackLink && <button type="button" onClick={ handlerClickBack }>&lt; Back</button> }
+    const handlerClickLogout = () => {
+        localStorage.removeItem('pokemonAuthorization');
+        clickLogout();
 
-                    <Link className="ml-auto" to="/logout">Logout</Link>
+        history.push('/login');
+    };
+
+    return (
+        <header className='header'>
+            <div className='container'>
+                <div className='header__nav'>
+                    { isBackLink && <button type='button' onClick={ handlerClickBack }>&lt; Back</button> }
+
+                    <button className='ml-auto' onClick={ handlerClickLogout }>Logout</button>
                 </div>
             </div>
         </header>

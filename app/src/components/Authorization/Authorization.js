@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import FormLogin from '../FormLogin/FormLogin';
-import './Authorization.css';
 import FormSmsCode from '../FormSmsCode/FormSmsCode';
 import { ERROR_MESSAGES, FORM_NAME } from '../../const';
+import './Authorization.css';
 
-const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => {
+const Authorization = ({ handlerLoginFormSubmit, handlerCodeFormSubmit, serverError }) => {
     const [isAuthorizationSuccess, setIsAuthorizationSuccess] = useState(true);
     const [showCodeForm, setShowCodeForm] = useState(false);
-
     const [state, setState] = useState({
         fields: {},
         errors: {}
@@ -15,15 +14,15 @@ const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => 
 
     useEffect(() => {
         if (serverError) {
-            setState(prevState => ({
-                ...prevState,
+            setState({
+                ...state,
                 errors: {}
-            }))
+            })
         }
     }, [serverError]);
 
-    const handleValidation = (formName) => {
-        let errors = {};
+    const validateForm = (formName) => {
+        const errors = {};
         let formIsValid = true;
 
         switch (formName) {
@@ -52,15 +51,18 @@ const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => 
                 break;
         }
 
-        setState({ ...state, errors: errors });
+        setState({
+            ...state,
+            errors: errors
+        });
         return formIsValid;
     };
 
-    const loginSubmit = (evt) => {
+    const submitLogin = (evt) => {
         evt.preventDefault();
 
-        if (handleValidation(FORM_NAME.LOGIN)) {
-            if (onLoginFormSubmit(state.fields)) {
+        if (validateForm(FORM_NAME.LOGIN)) {
+            if (handlerLoginFormSubmit(state.fields)) {
                 setShowCodeForm(true);
                 alert('Valid SMS code: 123456');
             } else {
@@ -69,14 +71,16 @@ const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => 
         }
     };
 
-    const codeSubmit = async (evt) => {
+    const submitCode = async (evt) => {
         evt.preventDefault();
 
-        if(handleValidation(FORM_NAME.CODE)) {
-            const isValidCode = await onCodeFormSubmit(state.fields.login, state.fields.code);
+        if(validateForm(FORM_NAME.CODE)) {
+            const isValidCode = await handlerCodeFormSubmit(state.fields.login, state.fields.code);
 
             if (!isValidCode) {
-                setState({ ...state, errors: {
+                setState({
+                    ...state,
+                    errors: {
                         code: ERROR_MESSAGES.incorrect_sms_code
                     }
                 });
@@ -84,10 +88,12 @@ const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => 
         }
     };
 
-    const handleChange = (evt) => {
-        let fields = state.fields;
+    const handlerChange = (evt) => {
+        const fields = state.fields;
         fields[evt.target.name] = evt.target.value;
-        setState({ fields, errors: {
+        setState({
+            fields,
+            errors: {
                 ...state.errors,
                 [evt.target.name]: null
             }
@@ -95,13 +101,18 @@ const Authorization = ({ onLoginFormSubmit, onCodeFormSubmit, serverError }) => 
     };
 
     return (
-        <div className="auth">
-            <div className="container">
-                { serverError && <p className="text-danger">Ошибка сервера: {serverError}</p> }
+        <div className='auth'>
+            <div className='container'>
+                { serverError && <p className='server-errors'>Server Error: { serverError }</p> }
 
                 { showCodeForm
-                    ? <FormSmsCode handleChange={ handleChange } submitForm={ codeSubmit } errors={ state.errors } />
-                    : <FormLogin isAuthorizationSuccess={ isAuthorizationSuccess } handleChange={ handleChange } submitForm={ loginSubmit } errors={ state.errors } />
+                    ? <FormSmsCode handlerChange={ handlerChange } submitForm={ submitCode } errors={ state.errors } />
+                    : <FormLogin
+                        isAuthorizationSuccess={ isAuthorizationSuccess }
+                        handlerChange={ handlerChange }
+                        submitForm={ submitLogin }
+                        errors={ state.errors }
+                    />
                 }
             </div>
         </div>

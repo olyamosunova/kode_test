@@ -11,8 +11,6 @@ const App = () => {
     const [isAuthorized, setIsAuthorized] = useState(isAuthorizedLocal);
     const [serverError, setServerError] = useState(null);
 
-    const loginHandler = ({ login, password }) => login === 'kode@kode.ru' && password === 'Enk0deng';
-
     const checkCode = async () => {
         let code = null;
 
@@ -35,7 +33,9 @@ const App = () => {
         return code;
     };
 
-    const smsCodeHandler = async (login, code) => {
+    const handlerLoginFormSubmit = ({ login, password }) => login === 'kode@kode.ru' && password === 'Enk0deng';
+
+    const handlerCodeFormSubmit = async (login, code) => {
         const getCode = await checkCode(code);
 
         if (getCode === code) {
@@ -64,8 +64,8 @@ const App = () => {
                         render={() => {
                             return !isAuthorized
                                 ? <Authorization
-                                    onLoginFormSubmit={ loginHandler }
-                                    onCodeFormSubmit={ smsCodeHandler }
+                                    handlerLoginFormSubmit={ handlerLoginFormSubmit }
+                                    handlerCodeFormSubmit={ handlerCodeFormSubmit }
                                     serverError={ serverError }
                                 />
                                 : <Redirect to='/cards' />;

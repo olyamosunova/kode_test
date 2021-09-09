@@ -4,23 +4,23 @@ import cx from 'classnames';
 import './CardItem.css';
 
 const CardItem = ({ className, card, handlerClickCard }) => {
-    const handlerClickDetail = (evt) => {
-        evt.stopPropagation();
-    };
-
     return (
-        <div className={ cx(className, { 'card-item': true }) } tabIndex={0} onClick={ handlerClickCard } >
-            <div className="card-item__image">
+        <div className={ cx(className, { 'card-item': true }) } tabIndex='0' onClick={ handlerClickCard } >
+            <div className='card-item__image'>
                 <img src={ card.images?.small } alt={ card.name } />
             </div>
 
-            <div className="card-item__info">
+            <div className='card-item__info'>
                 <p>{ card.name }</p>
                 <p> { card.artist }</p>
             </div>
 
-            <div className="card-item__controls">
-                <Link onClick={ handlerClickDetail } to={ `/cards/${ card.id }` } className="card-item__button">
+            <div className='card-item__controls'>
+                <Link
+                    onClick={ (evt) => evt.stopPropagation() }
+                    to={ `/cards/${ card.id }` }
+                    className='card-item__button'
+                >
                     Go to detail page
                 </Link>
             </div>

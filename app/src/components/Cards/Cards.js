@@ -13,24 +13,25 @@ import { getQueryForCards, setSearchParams } from '../../utils';
 import { POKEMON_API_KEY } from '../../const';
 import './Cards.css';
 
-const Cards = () => {
-    let history = useHistory();
+const Cards = ({ handlerClickLogout }) => {
+    const history = useHistory();
     const query = new URLSearchParams(history.location.search);
-
-    pokemon.configure({ apiKey: POKEMON_API_KEY });
-
     const [cards, setCards] = useState([]);
     const [pokemonTypes, setPokemonTypes] = useState([]);
     const [pokemonSubtypes, setPokemonSubtypes] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [chosenType, setChosenType] = useState(query.get('type') ?? '');
-    const [chosenSubtype, setChosenSubtype] = useState(query.get('subtype') ?? '');
+    const [chosenType, setChosenType] = useState(() => query.get('type') ?? '');
+    const [chosenSubtype, setChosenSubtype] = useState(() => query.get('subtype') ?? '');
     const [pageCount, setPageCount] = useState(0);
-    const [activePage, setActivePage] = useState(query.get('page') ? +query.get('page') : 1);
+    const [activePage, setActivePage] = useState(() => query.get('page') ? +query.get('page') : 1);
     const [activeModal, setActiveModal] = useState(null);
     const [serverError, setServerError] = useState(false);
 
+    pokemon.configure({ apiKey: POKEMON_API_KEY });
+
     useEffect(() => {
+        const query = getQueryForCards(chosenType, chosenSubtype);
+
         pokemon.type.all()
             .then(types => {
                 setPokemonTypes(types);
@@ -47,7 +48,7 @@ const Cards = () => {
                 setServerError(true);
             });
 
-        pokemon.card.where({ pageSize: 4, page: 1 })
+        pokemon.card.where({ pageSize: 4, page: 1, q: query })
             .then(response => {
                 setCards(response.data);
                 setPageCount(Math.round(response.totalCount / response.pageSize));
@@ -59,7 +60,7 @@ const Cards = () => {
     }, []);
 
     useEffect(() => {
-        let query = getQueryForCards(chosenType, chosenSubtype);
+        const query = getQueryForCards(chosenType, chosenSubtype);
         setIsLoaded(false);
 
         pokemon.card.where({ pageSize: 4, page: 1, q: query })
@@ -77,12 +78,13 @@ const Cards = () => {
     }, [chosenType, chosenSubtype]);
 
     useEffect(() => {
-        let query = getQueryForCards(chosenType, chosenSubtype);
+        const query = getQueryForCards(chosenType, chosenSubtype);
         setIsLoaded(false);
 
         pokemon.card.where({ pageSize: 4, page: activePage, q: query })
             .then(response => {
                 setCards(response.data);
+                setPageCount(Math.round(response.totalCount / response.pageSize));
             })
             .catch(() => {
                 setServerError(true);
@@ -99,41 +101,43 @@ const Cards = () => {
 
     return (
         <>
-            <Header />
+            <Header clickLogout={ handlerClickLogout } />
             <main className={ cx({ 'hidden': activeModal }) }>
-                <div className="container">
+                <div className='container'>
                     <>
                         { serverError
                             ? <ErrorBlock
-                                message="Не удалось загрузить карточки. Попробуйте перезагрузить страницу."
+                                message='Failed to load cards.'
+                                backUrl='/cards'
+                                handlerClickBack={ () => setServerError(false) }
                             />
                             :
-                            <div className="cards">
-                                <div className="cards__filter">
+                            <div className='cards'>
+                                <div className='cards__filter'>
                                     <Select
-                                        title="Type"
+                                        title='Type'
                                         items={ pokemonTypes }
                                         onSelect={ (value) => setChosenType(value) }
                                         activeItem={ chosenType }
                                     />
 
                                     <Select
-                                        title="Subtype"
+                                        title='Subtype'
                                         items={ pokemonSubtypes }
                                         onSelect={ (value) => setChosenSubtype(value) }
                                         activeItem={ chosenSubtype }
                                     />
                                 </div>
 
-                                <div className="cards__wrapper">
+                                <div className='cards__wrapper'>
                                     { !isLoaded
                                         ?  <Loader />
                                         :
                                         <>
-                                            <div className="cards__list">
+                                            <div className='cards__list'>
                                                 { cards.map(card => (
                                                     <CardItem
-                                                        className="cards__item"
+                                                        className='cards__item'
                                                         key={ card.id }
                                                         card={ card }
                                                         handlerClickCard={ () => setActiveModal(card) }

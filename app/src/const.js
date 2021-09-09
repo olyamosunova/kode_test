@@ -1,12 +1,7 @@
-export const AuthorizationStatus = {
-    NO_AUTH: `NO_AUTH`,
-    AUTH: `AUTH`,
-};
-
 export const ERROR_MESSAGES = {
-    empty_field: 'Поле должно быть заполнено.',
-    incorrect_authorization: 'Неверный логин или пароль.',
-    incorrect_sms_code: 'Неверный код'
+    empty_field: 'Required field.',
+    incorrect_authorization: 'Incorrect login or password.',
+    incorrect_sms_code: 'Invalid code'
 };
 
 export const FORM_NAME = {

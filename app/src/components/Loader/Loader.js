@@ -4,8 +4,8 @@ import './Loader.css';
 
 const Loader = () => {
     return (
-        <div className="loader">
-            <CircularProgress color="primary" />
+        <div className='loader'>
+            <CircularProgress color='primary' />
         </div>
     );
 };

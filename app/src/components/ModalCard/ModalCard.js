@@ -4,9 +4,7 @@ import './ModalCard.css';
 
 const ModalCard = ({ card, handlerCloseModal }) => {
     const { name, images } = card;
-
     const ModalWrapper = useRef();
-
     const [modalShow, setModalShow] = useState(false);
 
     useEffect(() => {
@@ -23,19 +21,19 @@ const ModalCard = ({ card, handlerCloseModal }) => {
     }, []);
 
   return (
-      <div className="modal-card">
+      <div className='modal-card'>
           <div
-              className={ cx("modal-card__wrapper", { "modal-card__wrapper--show": modalShow }) }
+              className={ cx('modal-card__wrapper', { 'modal-card__wrapper--show': modalShow }) }
               ref={ ModalWrapper }
           >
-              <div className="modal-card__header">
-                  <p className="modal-card__title">{ name }</p>
-                  <button className="modal-card__close" type="button" onClick={ handlerCloseModal }>
+              <div className='modal-card__header'>
+                  <p className='modal-card__title'>{ name }</p>
+                  <button className='modal-card__close' type='button' onClick={ handlerCloseModal }>
                       <span>Close modal</span>
                   </button>
               </div>
-              <div className="modal-card__body">
-                  <img src={ images.large } alt={ name } />
+              <div className='modal-card__body'>
+                  <img src={ images?.large } alt={ name } />
               </div>
           </div>
       </div>
