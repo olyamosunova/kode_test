@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/kode_test/static/css/main.99838aa2.chunk.css",
-    "main.js": "/kode_test/static/js/main.4a3dc62e.chunk.js",
-    "main.js.map": "/kode_test/static/js/main.4a3dc62e.chunk.js.map",
+    "main.js": "/kode_test/static/js/main.c24452a4.chunk.js",
+    "main.js.map": "/kode_test/static/js/main.c24452a4.chunk.js.map",
     "runtime-main.js": "/kode_test/static/js/runtime-main.08e4fa0d.js",
     "runtime-main.js.map": "/kode_test/static/js/runtime-main.08e4fa0d.js.map",
-    "static/js/2.194d2e20.chunk.js": "/kode_test/static/js/2.194d2e20.chunk.js",
-    "static/js/2.194d2e20.chunk.js.map": "/kode_test/static/js/2.194d2e20.chunk.js.map",
+    "static/js/2.ff21919b.chunk.js": "/kode_test/static/js/2.ff21919b.chunk.js",
+    "static/js/2.ff21919b.chunk.js.map": "/kode_test/static/js/2.ff21919b.chunk.js.map",
     "index.html": "/kode_test/index.html",
     "static/css/main.99838aa2.chunk.css.map": "/kode_test/static/css/main.99838aa2.chunk.css.map",
-    "static/js/2.194d2e20.chunk.js.LICENSE.txt": "/kode_test/static/js/2.194d2e20.chunk.js.LICENSE.txt",
+    "static/js/2.ff21919b.chunk.js.LICENSE.txt": "/kode_test/static/js/2.ff21919b.chunk.js.LICENSE.txt",
     "static/media/cry.f7c602c9.gif": "/kode_test/static/media/cry.f7c602c9.gif",
     "static/media/pokeball.e45a6ab4.png": "/kode_test/static/media/pokeball.e45a6ab4.png"
   },
   "entrypoints": [
     "static/js/runtime-main.08e4fa0d.js",
-    "static/js/2.194d2e20.chunk.js",
+    "static/js/2.ff21919b.chunk.js",
     "static/css/main.99838aa2.chunk.css",
-    "static/js/main.4a3dc62e.chunk.js"
+    "static/js/main.c24452a4.chunk.js"
   ]
 }
