@@ -23,6 +23,9 @@
 Путь к заданию: kode_test/app/ <br />
 <a href="https://olyamosunova.github.io/kode_test">Ссылка на gh pages</a>
 
+<p>login: kode@kode.ru</p>
+<p>password: Enk0deng</p>
+
 <ol>
     <li>
         <p>Экран авторизации</p>
